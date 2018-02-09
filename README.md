@@ -117,6 +117,7 @@ for synset in exwn.all_synsets(pos=[pos], lang=[lang]):
 # definition of word
 exwn.word('design', 'n')
 -> Word('design.n.eng')
+
 exwn.words('design')
 -> [Word('design.n.eng'),Word('design.v.eng')]
 
@@ -141,7 +142,7 @@ word.synsets()
 word.lemmas()
 ->[Lemma('design.n.01.design'), Lemma('design.n.02.design'), Lemma('blueprint.n.01.design'), Lemma('design.n.04.design'), Lemma('purpose.n.01.design'), Lemma('design.n.06.design'), Lemma('invention.n.01.design')]
 
-word.vector(topic=topic)
+word.vector(topic='automotive')
 ->[  1.10705128e-05   1.98191884e-05   1.39555417e-05   9.93190906e-07
   -2.22414645e-05   1.99030851e-05   8.21694933e-06  
 
