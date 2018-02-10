@@ -8,6 +8,14 @@ class exWordNetError(Exception):
 def _relatedness(v_in, v_out):
     return sum(v_in*v_out)/np.sqrt(sum(v_in*v_in)*sum(v_out*v_out))
 
+def search_line(f, key):
+    for line in f.readlines():
+        if line.find(key) >= 0:
+            return line
+        else:
+            continue
+    return None
+
 class Word(object):
     # used in ambiguity which is for weighting function
     _DELTA = 0.65
@@ -320,3 +328,24 @@ class exWordNet(object):
 
     def _relatedness(self, vec_in, vec_out):
         return _relatedness(vec_in, vec_out)
+    
+    ###############################
+    # Multilingual definitions
+    ###############################
+    # currently only adapt to Japanese
+    def definition(self, synset, lang='eng'):
+        if type(synset).__name__.lower() != 'synset':
+            raise exWordNetError('%r is not synset' % synset)
+            
+            if lang == 'eng':
+                return synset.definition()
+            elif lang == 'jpn':
+                _data_file = codecs.open('%s/wnjpn-def.txt' % self._root, 'r','utf-8','replace')
+                line = search_line(_data_file, synset.definition())
+                if line == None:
+                    raise exWordNetError('no definition for %r' % synset)
+                else:
+                    return line.strip().split(' ')[-1]
+            else:
+                raise exWordNetError('currently %s is not supported' % lang)
+
