@@ -336,16 +336,19 @@ class exWordNet(object):
     def definition(self, synset, lang='eng'):
         if type(synset).__name__.lower() != 'synset':
             raise exWordNetError('%r is not synset' % synset)
-            
-            if lang == 'eng':
-                return synset.definition()
-            elif lang == 'jpn':
-                _data_file = codecs.open('%s/wnjpn-def.txt' % self._root, 'r','utf-8','replace')
-                line = search_line(_data_file, synset.definition())
+        
+        if lang == 'eng':
+            return synset.definition()
+        else:
+            try:
+                _data_file = open('%s/%s.definition.txt' % (self._root, lang) , 'r')
+                key = '{:08d}-{}'.format(synset.offset(), synset.pos())
+                line = search_line(_data_file, key)
                 if line == None:
-                    raise exWordNetError('no definition for %r' % synset)
+                    return 'None'
+                # raise exWordNetError('no definition for %r' % synset)
                 else:
-                    return line.strip().split(' ')[-1]
-            else:
-                raise exWordNetError('currently %s is not supported' % lang)
+                    return line.strip().split('|')[-1]
+        except:
+            raise exWordNetError('currently %s is not supported' % lang)
 
