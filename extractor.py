@@ -13,9 +13,6 @@ class ExtractorError(Exception):
 
 wn = exWordNet('./')
 
-def normalize(lemma):
-    return lemma.replace("_", " ").replace("")
-
 def load_vector_line(file_name):
     model = {}
     f = open(file_name, 'r')
@@ -26,12 +23,12 @@ def load_vector_line(file_name):
     return model
 
 class BackwardWordNetExtractor:
-    def __init__(self, lang):
+    def __init__(self, root, lang):
         if lang in wn.langs():
             self.lang = lang
         else:
             raise ExtractorError("language: '%s' is not supported, try another language" % lang)
-        self._root= wn._root
+        self._root= root
         self.folder = '%s/%s' % (self._root, self.lang)
         # make directory for the language
         os.mkdir(self.folder)
@@ -166,15 +163,16 @@ class BackwardWordNetExtractor:
             print("  %s: %d\n" % (k, v))
 
 if __name__ == '__main__':
-    #path to input word embeddings
-    file_name = '/Users/arai9814/Desktop/input/synsets.txt'
-    #path to output folder
-    folder = '/Users/arai9814/Desktop/'
-    #language
-    lang = 'fra'
+    # get root
+    root = sys.argv[1]
+    # get languages
+    langs = sys.argv[2:]
+
+    for lang in langs:
+        bwne = BackwardWordNetExtractor(root, lang)
+        bwne.main()
+
     #List of Languages
     #     ['als', 'arb', 'cat', 'cmn', 'dan', 'eng', 'eus', 'fas',
     # 'fin', 'fra', 'fre', 'glg', 'heb', 'ind', 'ita', 'jpn', 'nno',
     # 'nob', 'pol', 'por', 'spa', 'tha', 'zsm']
-    bwne = BackwardWordNetExtractor(file_name, folder, lang)
-    bwne.main()
