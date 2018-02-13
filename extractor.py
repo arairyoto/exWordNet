@@ -16,7 +16,8 @@ def load_vector_line(file_name):
     f = open(file_name, 'r')
     for line in f.readlines():
         name = line.strip().split(' ')[0]
-        vector_line = ' '.join(line.strip().split[1:])
+        vector_line = line.strip().split(' ')[1:]
+        vector_line = ' '.join(vector_line)
         model[name] = vector_line
     return model
 
@@ -29,9 +30,12 @@ class BackwardWordNetExtractor:
         self._root= root
         self.folder = '%s/%s' % (self._root, self.lang)
         # make directory for the language
-        os.mkdir(self.folder)
+        try:
+            os.mkdir(self.folder)
+        except:
+            print('Folder %s already exists' % self.folder)
         # file name for synset vector
-        self.file_name = '%s/synsets.txt' % self.folder
+        self.file_name = '%s/synsets.txt' % self._root
         #initialize
         self.WordIndex = {}
         self.SynsetIndex = {}
@@ -68,30 +72,30 @@ class BackwardWordNetExtractor:
         lexemCounter = 0
         lexemCounterAll = 0
 
-        wordCounter = {}
-        wordCounterAll = {}
-        synsetCounter = {}
-        lexemCounter = {}
-        lexemCounterAll = {}
+        _wordCounter = {}
+        _wordCounterAll = {}
+        _synsetCounter = {}
+        _lexemCounter = {}
+        _lexemCounterAll = {}
         ovv = {}
 
         for pos in self.pos_list:
-            wordCounter[pos] = 0
-            wordCounterAll[pos] = 0
-            synsetCounter[pos] = 0
-            lexemCounter[pos] = 0
-            lexemCounterAll[pos] = 0
+            _wordCounter[pos] = 0
+            _wordCounterAll[pos] = 0
+            _synsetCounter[pos] = 0
+            _lexemCounter[pos] = 0
+            _lexemCounterAll[pos] = 0
             ovv[pos] = []
             for word in wn.all_words(pos=pos, lang=self.lang):
                 wordCounterAll += 1
-                wordCounterAll[pos] += 1
+                _wordCounterAll[pos] += 1
                 wordId = '%s.%s' % (word.name(), word.pos())
                 self.WordIndex[wordId] = wordCounterAll
                 fWords.write('%s ' % wordId)
                 synsetInWord = 0
                 for synset in word.synsets():
                     lexemCounterAll += 1
-                    lexemCounterAll[pos] += 1
+                    _lexemCounterAll[pos] += 1
                     synsetId = synset.name()
 
                     if synsetId in self.model.keys():
@@ -99,11 +103,11 @@ class BackwardWordNetExtractor:
                         if synsetId not in self.SynsetIndex:
                             fSynsets.write('%s %s\n' % (synsetId, self.model[synsetId]))
                             synsetCounter += 1
-                            synsetCounter[pos] += 1
+                            _synsetCounter[pos] += 1
                             self.SynsetIndex[synsetId] = synsetCounter
 
                         lexemCounter += 1
-                        lexemCounter[pos] += 1
+                        _lexemCounter[pos] += 1
                         lexemeId = '%s.%s' % (synset.name(), word.name())
 
                         fWords.write('%s,' % lexemeId)
@@ -116,14 +120,14 @@ class BackwardWordNetExtractor:
                 fWords.write('\n')
                 if synsetInWord != 0:
                     wordCounter += 1
-                    wordCounter[pos] += 1
+                    _wordCounter[pos] += 1
                 else:
                     self.WordIndex[word] = -1
 
             print("POS: %s" % pos)
-            print("   Words: %d / %d\n" % (wordCounter[pos], wordCounterAll[pos]))
-            print("  Synset: %d / %d\n" % (synsetCounter[pos], synsetCounter[pos] + len(ovv[pos])))
-            print("  Lexems: %d / %d\n" % (lexemCounter[pos], lexemCounterAll[pos]))
+            print("   Words: %d / %d\n" % (_wordCounter[pos], _wordCounterAll[pos]))
+            print("  Synset: %d / %d\n" % (_synsetCounter[pos], _synsetCounter[pos] + len(ovv[pos])))
+            print("  Lexems: %d / %d\n" % (_lexemCounter[pos], _lexemCounterAll[pos]))
         fWords.close()
         fSynsets.close()
         fLexemes.close()
