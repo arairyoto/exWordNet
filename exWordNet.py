@@ -355,5 +355,5 @@ class exWordNet(object):
                 # raise exWordNetError('no definition for %r' % synset)
                 else:
                     return line.strip().split('|')[-1]
-        except:
-            raise exWordNetError('currently %s is not supported' % lang)
+            except:
+                raise exWordNetError('currently %s is not supported' % lang)

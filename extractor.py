@@ -6,8 +6,6 @@ from exWordNet import exWordNet
 
 import codecs
 
-import util
-
 class ExtractorError(Exception):
     """An exception class for wordnet-related errors."""
 
