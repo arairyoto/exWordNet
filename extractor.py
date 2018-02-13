@@ -87,6 +87,7 @@ class BackwardWordNetExtractor:
             _lexemCounterAll[pos] = 0
             ovv[pos] = []
             for word in wn.all_words(pos=pos, lang=self.lang):
+                print(word)
                 wordCounterAll += 1
                 _wordCounterAll[pos] += 1
                 wordId = '%s.%s' % (word.name(), word.pos())
@@ -122,7 +123,7 @@ class BackwardWordNetExtractor:
                     wordCounter += 1
                     _wordCounter[pos] += 1
                 else:
-                    self.WordIndex[word] = -1
+                    self.WordIndex[wordId] = -1
 
             print("POS: %s" % pos)
             print("   Words: %d / %d\n" % (_wordCounter[pos], _wordCounterAll[pos]))
@@ -146,7 +147,7 @@ class BackwardWordNetExtractor:
 
                 for targetWord in targetWords:
                     pos = targetWord.pos()
-                    targetwordId = '%s.%s' % (targetWord.name(), targetWord.pos())
+                    targetWordId = '%s.%s' % (targetWord.name(), targetWord.pos())
 
                     if pos in affectedPOS:
                         affectedPOS[pos] += 1
@@ -155,7 +156,7 @@ class BackwardWordNetExtractor:
 
                     if wordId in self.WordIndex and targetWordId in self.WordIndex:
                         if self.WordIndex[wordId] >= 0 and self.WordIndex[targetWordId] >= 0:
-                            f,write('%d %d\n' % (self.WordIndex[wordId], self.WordIndex[targetWordId]))
+                            f.write('%d %d\n' % (self.WordIndex[wordId], self.WordIndex[targetWordId]))
                     else:
                         print(wordId, targetWordId)
         f.close()
