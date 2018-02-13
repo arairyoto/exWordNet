@@ -175,6 +175,12 @@ class exWordNet(object):
     def topics(self):
         return self._TOPICS
 
+    def langs(self):
+        return wn.langs()
+
+    def get_version(self):
+        return wn.get_version()
+
     def word(self, name, pos, lang='eng'):
         word = Word(self, name, pos, lang=lang)
         return word
@@ -328,7 +334,7 @@ class exWordNet(object):
 
     def _relatedness(self, vec_in, vec_out):
         return _relatedness(vec_in, vec_out)
-    
+
     ###############################
     # Multilingual definitions
     ###############################
@@ -336,7 +342,7 @@ class exWordNet(object):
     def definition(self, synset, lang='eng'):
         if type(synset).__name__.lower() != 'synset':
             raise exWordNetError('%r is not synset' % synset)
-        
+
         if lang == 'eng':
             return synset.definition()
         else:
@@ -351,4 +357,3 @@ class exWordNet(object):
                     return line.strip().split('|')[-1]
         except:
             raise exWordNetError('currently %s is not supported' % lang)
-
