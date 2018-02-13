@@ -115,7 +115,7 @@ class BackwardWordNetExtractor:
                         fLexemes.write('%d %d\n' % (self.SynsetIndex[synsetId], wordCounterAll))
 
                     else:
-                        if synsetId not in oov[pos]:
+                        if synsetId not in ovv[pos]:
                             ovv[pos].append(synsetId)
 
                 fWords.write('\n')

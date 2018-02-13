@@ -116,7 +116,7 @@ class ForwardWordNetExtractor:
                         fLexemes.write('%d %d\n' % (self.WordIndex[wordId], synsetCounterAll))
 
                     else:
-                        if wordId not in oov[pos]:
+                        if wordId not in ovv[pos]:
                             ovv[pos].append(wordId)
 
                 fSynsets.write('\n')
@@ -158,7 +158,7 @@ class ForwardWordNetExtractor:
                     else:
                         affectedPOS[pos] = 1
 
-                    if snysetId in self.SynsetIndex and targetSynsetId in self.SynsetIndex:
+                    if synsetId in self.SynsetIndex and targetSynsetId in self.SynsetIndex:
                         if self.SynsetIndex[synsetId] >= 0 and self.SynsetIndex[targetSynsetId] >= 0:
                             f.write('%d %d\n' % (self.SynsetIndex[synsetId], self.SynsetIndex[targetSynsetId]))
                     else:
