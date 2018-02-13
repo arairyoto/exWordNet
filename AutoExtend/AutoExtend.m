@@ -80,7 +80,7 @@ function [] = AutoExtend(varargin)
     ThetaMap = table2array(Table(:, 1:3));
     Iota = sparse(ThetaMap(:,1),ThetaMap(:,2),ones(size(ThetaMap,1),1),countWords,countSynsets);
     Theta = Iota';
-    F = sparse(ThetaMap(:,1),ThetaMap(:,2),ThetaMap(:,3).*ones(size(ThetaMap,1),1),countWords,countSynsets);
+    F = sparse(ThetaMap(:,1),ThetaMap(:,2),ThetaMap(:,3).*eye(size(ThetaMap,1)),countWords,countSynsets);
 
     % create relation matrix - will do a squared error of relation pairs
     RelationMap = [];
